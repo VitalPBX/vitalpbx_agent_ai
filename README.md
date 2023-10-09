@@ -47,7 +47,7 @@ Creating .env
   nano .env
 </pre>
 
-Copy the following content and add the APP Key to them and configure the routes correctly.
+Copy the following content and add the APIS Key.
 <pre>
 OPENAI_API_KEY = "sk-"
 AZURE_SPEECH_KEY = ""
