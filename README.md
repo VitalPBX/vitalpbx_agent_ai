@@ -13,6 +13,10 @@
 </pre>
 
 <pre>
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/requirements.txt
+</pre>
+
+<pre>
   apt install -r requirements.txt
 </pre>
 
