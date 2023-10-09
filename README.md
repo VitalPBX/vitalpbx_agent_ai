@@ -77,3 +77,11 @@ Below we show an example of how you should use the script to record the prompt.
 ./record-prompt.py welcome-es "Gracias por llamar, soy Vicky, tu asistente, en que te puedo ayudar hoy?" "es-ES"
 ./record-prompt.py short-message-es "La pregunta es demasiado corta, intente de nuevo por favor" "es-ES"
 </pre>
+
+## Testing Embedding
+To test the functionality of our AI Agent with the Embedding option, run the following script:
+<pre>
+  cd /var/lib/asterisk/agi-bin
+  ./chatbot.py
+</pre>
+
