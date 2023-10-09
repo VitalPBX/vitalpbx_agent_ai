@@ -63,10 +63,10 @@ Goto AGI directory
 </pre>
 
 The format to record a prompt is as follows:
-./record-prompt.py file-name "Text to record" language
-•	file-name --> file name if extension mp3, remember that in the Agent AI script, the welcome audio is: welcome-en (English), welcome-es (Spanish), and the wait audio is: wait-en (English), and wait-es (Spanish).
-•	languaje --> could be "en-US" or "es-ES"
-•	If you want to add more languages, you must modify the scripts<br>
+./record-prompt.py <stron>file-name "Text to record" language</stron><br>
+<stron>file-name</stron> --> file name if extension mp3, remember that in the Agent AI script, the welcome audio is: welcome-en (English), welcome-es (Spanish), and the wait audio is: wait-en (English), and wait-es (Spanish).
+<stron>languaje</stron> --> could be "en-US" or "es-ES"
+If you want to add more languages, you must modify the scripts<br>
 
 Below we show an example of how you should use the script to record the prompt.
 <pre>
