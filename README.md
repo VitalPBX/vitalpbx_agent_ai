@@ -13,11 +13,23 @@
 </pre>
 
 <pre>
+  apt install -r requirements.txt
+</pre>
+
+## Install from script
+
+<pre>
   wget
 </pre>
 
+Dar permisos de ejecucion
 <pre>
-  apt install -r requirements.txt
+  chmod +x vpbx-agent-ai.sh
+</pre>
+
+Ejecutar
+<pre>
+  ./vpbx-agent-ai.sh
 </pre>
 
 ## Create .env file
