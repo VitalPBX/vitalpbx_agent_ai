@@ -21,17 +21,17 @@
 </pre>
 
 ## Install from script
-
+Download the script
 <pre>
   wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/vpbx-agent-ai.sh
 </pre>
 
-Dar permisos de ejecucion
+Give execution permissions
 <pre>
   chmod +x vpbx-agent-ai.sh
 </pre>
 
-Ejecutar
+Run the script
 <pre>
   ./vpbx-agent-ai.sh
 </pre>
