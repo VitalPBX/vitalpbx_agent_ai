@@ -19,7 +19,7 @@
 ## Install from script
 
 <pre>
-  wget
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/vpbx-agent-ai.sh
 </pre>
 
 Dar permisos de ejecucion
@@ -33,6 +33,12 @@ Ejecutar
 </pre>
 
 ## Create .env file
+Goto AGI directory
+<pre>
+  cd /var/lib/asterisk/agi-bin/
+</pre>
+
+Creating .env
 <pre>
   nano .env
 </pre>
@@ -46,3 +52,18 @@ PATH_TO_DOCUMENTS = "/var/lib/asterisk/agi-bin/docs/"
 PATH_TO_DATABASE = "/var/lib/asterisk/agi-bin/data/"
 </pre>
 
+## Create voice guides
+Goto AGI directory
+<pre>
+  cd /var/lib/asterisk/agi-bin/
+</pre>
+
+Below we show an example of how you should use the script to record the prompt.
+<pre>
+./record-prompt.py wait-en "wait a moment" "en-US"
+./record-prompt.py welcome-en "Thanks for calling, I'm Vicky, your AI assistant, how can I help you today?" "en-US"
+./record-prompt.py short-message-en "The question is too short, please try again" "en-US"
+./record-prompt.py wait-es "espere un momento" "es-ES"
+./record-prompt.py welcome-es "Gracias por llamar, soy Vicky, tu asistente, en que te puedo ayudar hoy?" "es-ES"
+./record-prompt.py short-message-es "La pregunta es demasiado corta, intente de nuevo por favor" "es-ES"
+</pre>
