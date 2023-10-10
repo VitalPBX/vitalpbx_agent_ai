@@ -1,3 +1,5 @@
+pip install azure-cognitiveservices-speech
+pip install pyst2
 pip install python-dotenv==0.21.0
 pip install langchain==0.0.161
 pip install pypdf==3.8.1
