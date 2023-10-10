@@ -8,8 +8,6 @@
 <pre>
   apt update
   apt install python3 python3-pip
-  pip install azure-cognitiveservices-speech
-  pip install pyst2
 </pre>
 
 <pre>
