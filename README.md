@@ -80,6 +80,13 @@ Below we show an example of how you should use the script to record the prompt.
 
 ## Testing Embedding
 To test the functionality of our AI Agent with the Embedding option, run the following script:
+1.- Upload the document to the /var/lib/asterisk/agi-bin/docs folder with the information to use for the query with ChatGPT-Embedded<br>
+2.- To transfer this document to a Vector database (ChromaDB), proceed to execute the following command.
+<pre>
+  cd /var/lib/asterisk/agi-bin/
+  ./vpbx-embedded-docs.py
+</pre>
+3.- Now execute the following command and we proceed to ask any question in reference to the document that we previously uploaded.
 <pre>
   cd /var/lib/asterisk/agi-bin
   ./chatbot.py
