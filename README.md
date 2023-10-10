@@ -79,7 +79,7 @@ Below we show an example of how you should use the script to record the prompt.
 </pre>
 
 ## Testing Embedding
-To test the functionality of our AI Agent with the Embedding option, run the following script:
+To test the functionality of our AI Agent with the Embedding option, run the following script:<br>
 1.- Upload the document to the /var/lib/asterisk/agi-bin/docs folder with the information to use for the query with ChatGPT-Embedded<br>
 2.- To transfer this document to a Vector database (ChromaDB), proceed to execute the following command.
 <pre>
@@ -92,3 +92,11 @@ To test the functionality of our AI Agent with the Embedding option, run the fol
   ./chatbot.py
 </pre>
 
+## Testing call from VitalPBX
+To ask ChatGPT questions: Dial *778 for English or *779 for Spanish<br>
+For queries obtained from custom documentation, first upload the PDF document in the docs folder, then run from the console the command:
+<pre>
+  cd /var/lib/asterisk/agi-bin/ 
+  ./vpbx-embedded-docs.py
+</pre>
+To ask ChatGPT-Embedded questions: Dial *888 for English or *889 for Spanish
