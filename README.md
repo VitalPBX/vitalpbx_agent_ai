@@ -164,7 +164,12 @@ Now we are going to download the chat.html file and copy it to the /usr/share/vi
 <pre>
   cd /usr/share/vitalpbx/www
   wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chat.html
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/vpbx-agent-ai-m.png
 </pre>
 For HTTPS: wss, for HTTP: ws. If you are not going to use SSL just enter the IP of your server, otherwise leave ${location.hostname}.<br>
 
-Finally, edit the files vpbx-agent-ai-embedded.py and vpbx-agent-ai.py and uncomment everything related to sending messages via websocket.
+Finally, edit the files vpbx-agent-ai-embedded.py and vpbx-agent-ai.py and uncomment everything related to sending messages via websocket.<br>
+
+To see the chat in real time, run the url of your VitalPBX:<br>
+For example:<br>
+mypbxurl/chat.html
