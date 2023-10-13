@@ -1,4 +1,5 @@
 # VitalPBX - AI Agent with OpenAI ChatGPT, Whisper and Microsoft Azure AI Speech (TTS)
+![VitalPBX AGENT AI](https://github.com/VitalPBX/vitalpbx_agent_ai_chatgpt/blob/main/vitalpbx_agent_ai.png)
 ## Necessary Resources
 1.	OpenAI Account (https://platform.openai.com/apps).
 2.	Microsoft Azure Account (https://azure.microsoft.com/en-us/products/ai-services/text-to-speech)
