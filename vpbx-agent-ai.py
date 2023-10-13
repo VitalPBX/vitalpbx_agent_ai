@@ -72,7 +72,8 @@ def main():
             openai.api_key = OPENAI_API_KEY
             audio_file = open(recording_path + ".wav", "rb")
             transcript = openai.Audio.transcribe("whisper-1", audio_file)
-            chatgpt_question = transcript.text
+            chatgpt_question_t = transcript.text
+            chatgpt_question = chatgpt_question_t.replace('\n', ' ') 
 
 	    # If nothing is recorded, Whisper returns "you", so you have to ask again.
             if transcript.text == "you":
@@ -107,7 +108,8 @@ def main():
                        model="gpt-3.5-turbo",
                        messages=messages
                        )
-            chatgpt_answer = response['choices'][0]['message']['content']
+            chatgpt_answer_t = response['choices'][0]['message']['content']
+            chatgpt_answer = chatgpt_answer_t.replace('\n', ' ') 
 
             # save current question
             with open(pq_file, "w") as current_question:
