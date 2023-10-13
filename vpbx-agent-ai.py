@@ -3,8 +3,11 @@ import sys
 import os
 import openai
 import time
-from dotenv import load_dotenv
+# Uncomment if you are going to use sending information to a web page
+#import websockets
+#import asyncio
 import azure.cognitiveservices.speech as speechsdk
+from dotenv import load_dotenv
 
 # For Asterisk AGI
 from asterisk.agi import *
@@ -13,6 +16,12 @@ load_dotenv("/var/lib/asterisk/agi-bin/.env")
 AZURE_SPEECH_KEY = os.environ.get('AZURE_SPEECH_KEY')
 AZURE_SERVICE_REGION = os.environ.get('AZURE_SERVICE_REGION')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+
+# Uncomment if you are going to use sending information to a web page
+# For valid domains with SSL:
+#HOST_PORT = 'wss://valid.domain:3001'
+# For environments without a valid domain:
+#HOST_PORT = 'ws://IP:3001'
 
 agi = AGI()
 
@@ -27,6 +36,7 @@ if uniquedid is None:
 # Check if a file name was provided
 recording_path = f"/tmp/rec{uniquedid}"
 answer_path = f"/tmp/ans{uniquedid}.mp3"
+pq_file = f"/tmp/pq{uniquedid}.txt"
 pa_file = f"/tmp/pa{uniquedid}.txt"
 
 if language == "es-ES":
@@ -62,6 +72,7 @@ def main():
             openai.api_key = OPENAI_API_KEY
             audio_file = open(recording_path + ".wav", "rb")
             transcript = openai.Audio.transcribe("whisper-1", audio_file)
+            chatgpt_question = transcript.text
 
 	    # If nothing is recorded, Whisper returns "you", so you have to ask again.
             if transcript.text == "you":
@@ -70,7 +81,17 @@ def main():
                 sys.exit(1)
 
             #DEBUG
-            agi.verbose(transcript.text,2)
+            agi.verbose("AUDIO TRANSCRIPT: " + chatgpt_question,2)
+
+            # It is used to send the question via WebSocket, to be displayed on a web page. 
+            # Uncomment if you want to use this functionality with the chatserver.py script
+            # If the chatserver.py program is not running the AGI will not work.
+            #try:
+            #    chatgpt_question_tv = "USER: " + chatgpt_question
+            #    asyncio.get_event_loop().run_until_complete(send_message_to_websocket(chatgpt_question_tv))
+            #    agi.verbose("MESSAGE SENT TO WEBSOCKET")
+            #except AGIException as e:
+            #    agi.verbose("MESSAGE SENT TO WEBSOCKET ERROR:" + str(e))
 
 	    # Find the previous question, with the idea of keeping the conversation
             if os.path.exists(pa_file):
@@ -80,7 +101,7 @@ def main():
                 previous_question = ""
 
             messages = []
-            messages.append({"role": "user", "content": transcript.text})
+            messages.append({"role": "user", "content": chatgpt_question})
             messages.append({"role": "assistant", "content": previous_question})
             response = openai.ChatCompletion.create(
                        model="gpt-3.5-turbo",
@@ -88,12 +109,27 @@ def main():
                        )
             chatgpt_answer = response['choices'][0]['message']['content']
 
+            # save current question
+            with open(pq_file, "w") as current_question:
+                current_question.write(chatgpt_question + "\n")
+
             # save current answer
             with open(pa_file, "w") as current_answer:
                 current_answer.write(chatgpt_answer + "\n")
 
             #DEBUG
-            agi.verbose(chatgpt_answer,2)
+            agi.verbose("ChatGPT ANSWER: " + chatgpt_answer,2)
+
+            # It is used to send the answer via WebSocket, to be displayed on a web page. 
+            # Uncomment if you want to use this functionality with the chatserver.py script
+            # If the chatserver.py program is not running the AGI will not work.
+            #try:
+            #    chatgpt_answer_tv = "ASSISTANT: " + chatgpt_answer 
+            #    asyncio.get_event_loop().run_until_complete(send_message_to_websocket(chatgpt_answer_tv)) 
+            #    agi.verbose("MESSAGE SENT TO WEBSOCKET")     
+            #except AGIException as e:
+            #    agi.verbose("MESSAGE SENT TO WEBSOCKET ERROR:" + str(e))
+
 
             # Sets API Key and Region
             speech_config = speechsdk.SpeechConfig(subscription=AZURE_SPEECH_KEY, region=AZURE_SERVICE_REGION)
