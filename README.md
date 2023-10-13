@@ -102,6 +102,13 @@ To ask ChatGPT-Embedded questions: Dial *888 for English or *889 for Spanish
 
 ## View in real time
 It is possible to see the question and answer in real time on a web page, for which we are going to follow the following procedure.<br>
+
+Install prerequisites
+<pre>
+pip install websocket-client
+pip install asyncio
+</pre>
+
 We are going to copy the chatserver.py file to the folder we want (It could be /var/lib/asterisk/agi-bin/).
 <pre>
   cd /var/lib/asterisk/agi-bin/
