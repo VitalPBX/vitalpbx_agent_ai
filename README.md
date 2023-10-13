@@ -183,6 +183,6 @@ To make sure everything is fine, we can run the following command.
 And it would have to return the following to us:
 <pre>
 tcp        0      0 192.168.57.50:3001       0.0.0.0:*               LISTEN     
-tcp        0      0 127.0.1.1:3001          0.0.0.0:*               LISTEN  
+tcp        0      0 127.0.1.1:3001           0.0.0.0:*               LISTEN  
 </pre>
 Don 192.168.57.50 is our public or private IP.
