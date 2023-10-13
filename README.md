@@ -173,3 +173,6 @@ Finally, edit the files vpbx-agent-ai-embedded.py and vpbx-agent-ai.py and uncom
 To see the chat in real time, run the url of your VitalPBX:<br>
 For example:<br>
 mypbxurl/chat.html
+
+### Note
+Remember to unblock port 3001 or the one you decided to use in the VitalPBx firewall as in any other firewall that VitalPBX has in front of you.
