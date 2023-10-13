@@ -12,8 +12,8 @@ connected = set()
 
 #ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 
-#ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.org/bundle.pem"
-#ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.org/private.pem"
+#ssl_cert = "/usr/share/vitalpbx/certificates/your.domain/bundle.pem"
+#ssl_key = "/usr/share/vitalpbx/certificates/your.domain/private.pem"
 
 async def echo(websocket, path):
     # Register.
@@ -34,8 +34,8 @@ async def echo(websocket, path):
         print(f"Client {websocket.remote_address} disconnected.")
 
 # If you are not going to use SSL just enter the IP of your server, otherwise enter the domain.
-start_server = websockets.serve(echo, '192.168.10.10', 3001)
-print("WebSocket server started on ws://192.168.10.10:3001")
+start_server = websockets.serve(echo, 'IP or Domain', 3001)
+print("WebSocket server started on ws://IP or Domain:3001")
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
