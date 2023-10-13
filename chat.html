@@ -1,0 +1,95 @@
+<!-- chat.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            background-image: url('vpbx-agent-ai-m.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-size: 100% 100%;
+            opacity: 0.9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #chat {
+            width: 60%;
+            height: 600px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            overflow-y: scroll;
+            border-radius: 10px;
+            position: relative;
+            margin-top: -100px;
+        }
+
+        #chat p {
+            padding: 10px 15px;
+            border-radius: 15px;
+            background-color: #e1e1e1;
+            margin-bottom: 10px;
+            line-height: 1.5;
+            clear: both;
+        }
+
+        #chat p.user {
+            background-color: #007AFF;
+            color: white;
+            float: right;
+            margin-left: 25%; /* Ajustar según prefieras */
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="chat"></div>
+
+    <script>
+        const chatDiv = document.getElementById('chat');
+
+        function connect() {
+            // For HTTPS: wss, for HTTP: ws. If you are not going to use SSL just enter the IP of your server, otherwise leave ${location.hostname}.
+            const socket = new WebSocket(`wss://${location.hostname}:3001`);
+
+            socket.addEventListener('message', function (event) {
+                const p = document.createElement('p');
+                p.textContent = event.data;
+            
+                if (event.data.startsWith("USER")) {
+                    p.classList.add("user");
+                }
+
+                chatDiv.appendChild(p);
+                // Auto-scroll
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            });
+
+            socket.addEventListener('close', function (event) {
+                console.log('Socket closed. Trying to reconnect in 5 seconds...');
+                setTimeout(connect, 5000);  // Intentar reconectar cada 5 segundos
+            });
+
+            socket.addEventListener('open', function (event) {
+                console.log('Connected to the WebSocket server.');
+            });
+        }
+
+        // Start connection on page load
+        connect();
+    </script>
+</body>
+
+</html>
