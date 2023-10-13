@@ -175,4 +175,14 @@ For example:<br>
 mypbxurl/chat.html
 
 ### Note
-Remember to unblock port 3001 or the one you decided to use in the VitalPBx firewall as in any other firewall that VitalPBX has in front of you.
+Remember to unblock port 3001 or the one you decided to use in the VitalPBx firewall as in any other firewall that VitalPBX has in front of you.<br>
+To make sure everything is fine, we can run the following command.
+<pre>
+  netstat -tuln | grep 3001
+</pre>
+And it would have to return the following to us:
+<pre>
+tcp        0      0 192.168.57.50:3001       0.0.0.0:*               LISTEN     
+tcp        0      0 127.0.1.1:3001          0.0.0.0:*               LISTEN  
+</pre>
+Don 192.168.57.50 is our public or private IP.
