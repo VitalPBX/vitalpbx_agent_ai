@@ -109,6 +109,55 @@ We are going to copy the chatserver.py file to the folder we want (It could be /
   chamod +x chatserver.py
 </pre>
 
+Edit the file you just downloaded (chatserver.py)
+<pre>
+  cd /var/lib/asterisk/agi-bin/
+  nano chatserver.py
+</pre>
 
+Replace the following lines with your IP or Domain if you use SSL.<br>
+If you use ssl with a valid domain remember to change ws to wss.
+<pre>
+start_server = websockets.serve(echo, 'Your_IP_or_Domain', 3001)
+print("WebSocket server started on ws://Your_IP_or_Domain:3001")
+</pre>
 
+Now we will proceed to create the service
+<pre>
+  cd /etc/systemd/system/
+  nano vpbxagentai.service
+</pre>
 
+Copy and paste the following content
+<pre>
+[Unit]
+Description=Agent AI
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /var/lib/asterisk/agi-bin/chatserver.py
+Restart=always
+User=root
+Group=root
+Environment=VariableDeEntorno=valor
+WorkingDirectory=/var/lib/asterisk/agi-bin
+
+[Install]
+WantedBy=multi-user.target
+</pre>
+
+Enable and start the service
+<pre>
+systemctl enable vpbxagentai
+systemctl start vpbxagentai
+systemctl status vpbxagentai
+</pre>
+
+Now we are going to download the chat.html file and copy it to the /usr/share/vitalpbx/www folder
+<pre>
+  cd /usr/share/vitalpbx/www
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chat.html
+</pre>
+For HTTPS: wss, for HTTP: ws. If you are not going to use SSL just enter the IP of your server, otherwise leave ${location.hostname}.<br>
+
+Finally, edit the files vpbx-agent-ai-embedded.py and vpbx-agent-ai.py and uncomment everything related to sending messages via websocket.
