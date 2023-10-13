@@ -99,3 +99,16 @@ For queries obtained from custom documentation, first upload the PDF document in
   ./vpbx-embedded-docs.py
 </pre>
 To ask ChatGPT-Embedded questions: Dial *888 for English or *889 for Spanish
+
+## View in real time
+It is possible to see the question and answer in real time on a web page, for which we are going to follow the following procedure.<br>
+We are going to copy the chatserver.py file to the folder we want (It could be /var/lib/asterisk/agi-bin/).
+<pre>
+  cd /var/lib/asterisk/agi-bin/
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chatserver.py
+  chamod +x chatserver.py
+</pre>
+
+
+
+
