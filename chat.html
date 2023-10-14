@@ -23,17 +23,33 @@
 
         /* Styling for the chat container */
         #chat {
-            width: 60%;
-            height: 700px; /* Fixed height for the chat container */
+            width: 48.2%;
+            height: 565px; /* Fixed height for the chat container */
             border: 1px solid #ccc;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adds a shadow to the chat container */
             background-color: #fff;
             overflow-y: scroll; /* Enable vertical scrolling for overflow content */
-            border-radius: 10px;
+            border-radius: 20px;
             position: relative;
-            margin-top: -200px; /* Adjust the margin for positioning */
+            margin-top: -135px; /* Adjust the margin for positioning */
             font-family: "Arial", sans-serif;
+        }
+
+        #chat::before {
+            content: "";
+            width: 12px; /* Width of the vertical scroll */
+            height: 100%;
+            background-color: transparent; /* Background color of the scroll */
+            position: absolute;
+            top: 0;
+            left: -12px; /* Move the scroll to the left outside the container */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out; /* Add a smooth transition for scroll appearance/disappearance */
+        }
+
+        #chat:hover::before {
+            opacity: 1; /* Show the scroll when the user hovers over the container */
         }
 
         /* Styling for individual chat messages */
@@ -44,7 +60,7 @@
             margin-bottom: 10px; /* Add spacing between chat messages */
             line-height: 1.5; /* Adjust line height for readability */
             clear: both; /* Clear the float for proper alignment */
-            font-size: 16px;
+            font-size: 20px;
             white-space: pre-wrap;
             word-wrap: break-word; /* Allow words to break when they exceed the container width */
         }
@@ -56,6 +72,19 @@
             float: right; /* Right-align user messages */
             margin-left: 25%; /* Adjust the left margin for positioning */
         }
+
+        /* Customize the vertical scrollbar */
+        #chat::-webkit-scrollbar {
+            width: 6px; /* Width of the vertical scrollbar */
+        }
+
+        /* Customize the thumb (the part you can drag) of the vertical scrollbar */
+        #chat::-webkit-scrollbar-thumb {
+            background-color: #ccc; /* Color of the scrollbar thumb */
+            border-radius: 5px; /* Rounded corners of the scrollbar thumb */
+            max-height: 80%; /* Maximum height relative to the container's space */
+        }
+
     </style>
 </head>
 
@@ -78,7 +107,7 @@
                 // Display content letter by letter
                 const message = event.data;
                 let index = 0;
-                const speed = 50; // Typing speed (milliseconds per letter)
+                const speed = 30; // Typing speed (milliseconds per letter)
 
                 function typeWriter() {
                     if (index < message.length) {
