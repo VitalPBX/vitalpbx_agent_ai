@@ -53,6 +53,10 @@ else:
     wait_message = "/var/lib/asterisk/sounds/wait-en.mp3"
     short_message = "/var/lib/asterisk/sounds/short-message-en.mp3"
 
+# Function to send a message to a WebSocket (Uncomment if needed)
+# async def send_message_to_websocket(message):
+#     async with websockets.connect(HOST_PORT) as websocket:
+#         await websocket.send(message)
 
 def main():
     try:
@@ -85,7 +89,17 @@ def main():
 
             # DEBUG
             agi.verbose("AUDIO TRANSCRIPT: " + chatgpt_question_agi, 2)
-
+		
+            # It is used to send the question via WebSocket, to be displayed on a web page.
+            # Uncomment if you want to use this functionality with the chatserver.py script
+            # If the chatserver.py program is not running the AGI will not work.
+            # try:
+            #     chatgpt_question_tv = "USER: " + chatgpt_question
+            #     asyncio.get_event_loop().run_until_complete(send_message_to_websocket(chatgpt_question_tv))
+            #     agi.verbose("MESSAGE SENT TO WEBSOCKET")
+            # except AGIException as e:
+            #     agi.verbose("MESSAGE SENT TO WEBSOCKET ERROR:" + str(e))
+		
             # Find the previous question, with the idea of keeping the conversation
             if os.path.exists(pa_file):
                 with open(pa_file, 'r') as previous_file:
