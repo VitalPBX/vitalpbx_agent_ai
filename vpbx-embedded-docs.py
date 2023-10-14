@@ -10,13 +10,18 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.text_splitter import CharacterTextSplitter
 
+# Load environment variables from a .env file
 load_dotenv("/var/lib/asterisk/agi-bin/.env")
+
+# Retrieve paths and API keys from environment variables
 PATH_TO_DOCUMENTS = os.environ.get('PATH_TO_DOCUMENTS')
 PATH_TO_DATABASE = os.environ.get('PATH_TO_DATABASE')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
+# Create an empty list to store documents
 documents = []
-# Create a List of Documents from all of our files in the PATH_TO_DOCUMENTS folder
+
+# Create a List of Documents from all files in the PATH_TO_DOCUMENTS folder
 for file in os.listdir(PATH_TO_DOCUMENTS):
     if file.endswith(".pdf"):
         pdf_path = PATH_TO_DOCUMENTS + file
@@ -35,6 +40,6 @@ for file in os.listdir(PATH_TO_DOCUMENTS):
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=10)
 documents = text_splitter.split_documents(documents)
 
-# Convert the document chunks to embedding and save them to the vector store
+# Convert the document chunks to embeddings and save them to the vector store
 vectordb = Chroma.from_documents(documents, embedding=OpenAIEmbeddings(), persist_directory="./data")
 vectordb.persist()
