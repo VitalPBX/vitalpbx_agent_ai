@@ -32,22 +32,26 @@
             border-radius: 10px;
             position: relative;
             margin-top: -100px;
+            font-family: "Arial", sans-serif;
         }
 
-        #chat p {
+        #chat pre {
             padding: 10px 15px;
             border-radius: 15px;
             background-color: #e1e1e1;
             margin-bottom: 10px;
             line-height: 1.5;
             clear: both;
+            font-size: 20px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
-        #chat p.user {
+        #chat pre.user {
             background-color: #007AFF;
             color: white;
             float: right;
-            margin-left: 25%; /* Ajustar según prefieras */
+            margin-left: 25%;
         }
 
     </style>
@@ -61,25 +65,22 @@
         const chatDiv = document.getElementById('chat');
 
         function connect() {
-            // For HTTPS: wss, for HTTP: ws. If you are not going to use SSL just enter the IP of your server, otherwise leave ${location.hostname}.
-            const socket = new WebSocket(`wss://${location.hostname}:3001`);
+            const socket = new WebSocket(`ws://${location.hostname}:3001`);
 
             socket.addEventListener('message', function (event) {
-                const p = document.createElement('p');
-                p.textContent = event.data;
-            
-                if (event.data.startsWith("USER")) {
-                    p.classList.add("user");
+                const pre = document.createElement('pre');
+                pre.textContent = event.data;
+                 if (event.data.startsWith("USER")) {
+                    pre.classList.add("user");
                 }
-
-                chatDiv.appendChild(p);
+                chatDiv.appendChild(pre);
                 // Auto-scroll
                 chatDiv.scrollTop = chatDiv.scrollHeight;
             });
 
             socket.addEventListener('close', function (event) {
                 console.log('Socket closed. Trying to reconnect in 5 seconds...');
-                setTimeout(connect, 5000);  // Intentar reconectar cada 5 segundos
+                setTimeout(connect, 5000);
             });
 
             socket.addEventListener('open', function (event) {
