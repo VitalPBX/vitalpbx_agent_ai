@@ -81,8 +81,8 @@ def main():
             openai.api_key = OPENAI_API_KEY
             audio_file = open(recording_path + ".wav", "rb")
             transcript = openai.Audio.transcribe("whisper-1", audio_file)
-            chatgpt_question_t = transcript.text
-            chatgpt_question = chatgpt_question_t.replace('\n', ' ') 
+            chatgpt_question = transcript.text
+            chatgpt_question_agi = chatgpt_question.replace('\n', ' ') 
 
 	    # If nothing is recorded, Whisper returns "you", so you have to ask again.
             if chatgpt_question == "you":
@@ -143,11 +143,11 @@ def main():
             response = resp_qa(
                 {"question": chatgpt_question, "chat_history": chat_history})
 
-            chatgpt_answer_t = response["answer"]
-            chatgpt_answer = chatgpt_answer_t.replace('\n', ' ')
+            chatgpt_answer = response["answer"]
+            chatgpt_answer_agi = chatgpt_answer.replace('\n', ' ')
 
             #DEBUG
-            agi.verbose("ChatGPT ANSWER: " + chatgpt_answer,2)
+            agi.verbose("ChatGPT ANSWER: " + chatgpt_answer_agi,2)
       
             # It is used to send the answer via WebSocket, to be displayed on a web page. 
             # Uncomment if you want to use this functionality with the chatserver.py script
