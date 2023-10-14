@@ -98,7 +98,7 @@ def main():
                 sys.exit(1)
 
             # DEBUG
-            agi.verbose("AUDIO TRANSCRIPT: " + chatgpt_question, 2)
+            agi.verbose("AUDIO TRANSCRIPT: " + chatgpt_question_agi, 2)
 
             # It is used to send the question via WebSocket, to be displayed on a web page.
             # Uncomment if you want to use this functionality with the chatserver.py script
