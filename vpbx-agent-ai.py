@@ -72,8 +72,8 @@ def main():
             openai.api_key = OPENAI_API_KEY
             audio_file = open(recording_path + ".wav", "rb")
             transcript = openai.Audio.transcribe("whisper-1", audio_file)
-            chatgpt_question_t = transcript.text
-            chatgpt_question = chatgpt_question_t.replace('\n', ' ') 
+            chatgpt_question = transcript.text
+            chatgpt_question_agi = chatgpt_question.replace('\n', ' ') 
 
 	    # If nothing is recorded, Whisper returns "you", so you have to ask again.
             if transcript.text == "you":
@@ -82,7 +82,7 @@ def main():
                 sys.exit(1)
 
             #DEBUG
-            agi.verbose("AUDIO TRANSCRIPT: " + chatgpt_question,2)
+            agi.verbose("AUDIO TRANSCRIPT: " + chatgpt_question_agi,2)
 
             # It is used to send the question via WebSocket, to be displayed on a web page. 
             # Uncomment if you want to use this functionality with the chatserver.py script
@@ -108,8 +108,8 @@ def main():
                        model="gpt-3.5-turbo",
                        messages=messages
                        )
-            chatgpt_answer_t = response['choices'][0]['message']['content']
-            chatgpt_answer = chatgpt_answer_t.replace('\n', ' ') 
+            chatgpt_answer = response['choices'][0]['message']['content']
+            chatgpt_answer_agi = chatgpt_answer.replace('\n', ' ') 
 
             # save current question
             with open(pq_file, "w") as current_question:
@@ -120,7 +120,7 @@ def main():
                 current_answer.write(chatgpt_answer + "\n")
 
             #DEBUG
-            agi.verbose("ChatGPT ANSWER: " + chatgpt_answer,2)
+            agi.verbose("ChatGPT ANSWER: " + chatgpt_answer_agi,2)
 
             # It is used to send the answer via WebSocket, to be displayed on a web page. 
             # Uncomment if you want to use this functionality with the chatserver.py script
