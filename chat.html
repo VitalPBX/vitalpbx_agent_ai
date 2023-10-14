@@ -1,4 +1,3 @@
-<!-- chat.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Chat</title>
     <style>
+        /* Styling for the body of the page */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -18,69 +18,88 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100vh; /* Set the height to cover the entire viewport */
         }
 
+        /* Styling for the chat container */
         #chat {
             width: 60%;
-            height: 700px;
+            height: 700px; /* Fixed height for the chat container */
             border: 1px solid #ccc;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adds a shadow to the chat container */
             background-color: #fff;
-            overflow-y: scroll;
+            overflow-y: scroll; /* Enable vertical scrolling for overflow content */
             border-radius: 10px;
             position: relative;
-            margin-top: -200px;
+            margin-top: -200px; /* Adjust the margin for positioning */
             font-family: "Arial", sans-serif;
         }
 
+        /* Styling for individual chat messages */
         #chat pre {
             padding: 10px 15px;
             border-radius: 15px;
             background-color: #e1e1e1;
-            margin-bottom: 10px;
-            line-height: 1.5;
-            clear: both;
+            margin-bottom: 10px; /* Add spacing between chat messages */
+            line-height: 1.5; /* Adjust line height for readability */
+            clear: both; /* Clear the float for proper alignment */
             font-size: 16px;
             white-space: pre-wrap;
-            word-wrap: break-word;
+            word-wrap: break-word; /* Allow words to break when they exceed the container width */
         }
 
+        /* Styling for user messages */
         #chat pre.user {
-            background-color: #007AFF;
+            background-color: #007AFF; /* Blue background for user messages */
             color: white;
-            float: right;
-            margin-left: 25%;
+            float: right; /* Right-align user messages */
+            margin-left: 25%; /* Adjust the left margin for positioning */
         }
-
     </style>
 </head>
 
 <body>
-
     <div id="chat"></div>
-
     <script>
+        // JavaScript code for handling WebSocket communication and message display
         const chatDiv = document.getElementById('chat');
 
         function connect() {
             const socket = new WebSocket(`ws://${location.hostname}:3001`);
 
             socket.addEventListener('message', function (event) {
-                const pre = document.createElement('pre');
-                pre.textContent = event.data;
-                 if (event.data.startsWith("USER")) {
-                    pre.classList.add("user");
-                }
-                chatDiv.appendChild(pre);
-                // Auto-scroll
+                // Create a chat bubble
+                const bubble = document.createElement('pre');
+                bubble.textContent = ''; // Initially empty
+                chatDiv.appendChild(bubble);
                 chatDiv.scrollTop = chatDiv.scrollHeight;
+
+                // Display content letter by letter
+                const message = event.data;
+                let index = 0;
+                const speed = 50; // Typing speed (milliseconds per letter)
+
+                function typeWriter() {
+                    if (index < message.length) {
+                        bubble.textContent += message.charAt(index);
+                        index++;
+                        chatDiv.scrollTop = chatDiv.scrollHeight;
+                        setTimeout(typeWriter, speed);
+                    }
+                }
+
+                typeWriter();
+
+                // Add "user" class if the message starts with "USER"
+                if (event.data.startsWith("USER")) {
+                    bubble.classList.add("user");
+                }
             });
 
             socket.addEventListener('close', function (event) {
                 console.log('Socket closed. Trying to reconnect in 5 seconds...');
-                setTimeout(connect, 5000);
+                setTimeout(connect, 5000);  // Try to reconnect every 5 seconds
             });
 
             socket.addEventListener('open', function (event) {
@@ -88,7 +107,7 @@
             });
         }
 
-        // Start connection on page load
+        // Start the connection on page load
         connect();
     </script>
 </body>
