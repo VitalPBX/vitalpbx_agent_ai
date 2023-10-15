@@ -77,7 +77,7 @@ Below we show an example of how you should use the script to record the prompt.
 ./record-prompt.py wait-es "espere un momento" "es-ES"
 ./record-prompt.py welcome-es "Gracias por llamar, soy Vicky, tu asistente, en que te puedo ayudar hoy?" "es-ES"
 ./record-prompt.py short-message-es "La pregunta es demasiado corta, intente de nuevo por favor" "es-ES"
-./record-prompt.py anything-else-en "Algo más en lo que te pueda ayudar?" "es-ES"  
+./record-prompt.py anything-else-es "Algo más en lo que te pueda ayudar?" "es-ES"  
 </pre>
 
 ## Testing Embedding
