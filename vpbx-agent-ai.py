@@ -107,12 +107,16 @@ def main():
             else:
                 previous_question = ""
 
+            # Send the question to ChatGPT
+            # Low "Temperature": More deterministic and predictable responses. High "Temperature": More diverse and creative responses, but less predictable.
+
             messages = []
             messages.append({"role": "user", "content": chatgpt_question})
             messages.append({"role": "assistant", "content": previous_question})
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
-                messages=messages
+                messages=messages,
+                temperature=0.2 
             )
             chatgpt_answer = response['choices'][0]['message']['content']
             chatgpt_answer_agi = chatgpt_answer.replace('\n', ' ')
