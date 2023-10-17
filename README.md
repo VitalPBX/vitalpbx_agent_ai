@@ -254,7 +254,7 @@ http://mypbxurl/chatbot<br>
 or<br>
 https://mypbxurl/chatbot
 ### Note
-Remember to unblock port 3001 or the one you decided to use in the VitalPBx firewall as in any other firewall that VitalPBX has in front of you.<br>
+Remember to unblock port 3001, 3002 or the one you decided to use in the VitalPBx firewall as in any other firewall that VitalPBX has in front of you.<br>
 To make sure everything is fine, we can run the following command.
 <pre>
   netstat -tuln | grep 3001
