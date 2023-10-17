@@ -109,14 +109,14 @@
                 } else {
                     console.log("Connection died");
                 }
-                setTimeout(connect, RECONNECT_DELAY);  // Reconectar después de un delay
+                setTimeout(connect, RECONNECT_DELAY);  // Reconectar despuÃ©s de un delay
             };
 
             ws.onerror = function(error) {
                 console.error("WebSocket Error:", error);
             };
 
-            ws.onmessage = handleMessage; // puedes mover la función handleMessage fuera de $(document).ready
+            ws.onmessage = handleMessage; // puedes mover la funciÃ³n handleMessage fuera de $(document).ready
         }
 
 
