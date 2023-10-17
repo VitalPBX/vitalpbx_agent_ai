@@ -166,8 +166,10 @@ systemctl status vpbxagentai
 Now we are going to download the chat.html file and copy it to the /usr/share/vitalpbx/www folder
 <pre>
   cd /usr/share/vitalpbx/www
-  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chat.html
-  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/vpbx-agent-ai-m.png
+  mkdir chatview
+  cd chatview
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chatview/index.html
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chatview/vpbx-agent-ai-m.png
 </pre>
 For HTTPS: wss, for HTTP: ws. If you are not going to use SSL just enter the IP of your server, otherwise leave ${location.hostname}.<br>
 
@@ -175,7 +177,7 @@ Finally, edit the files vpbx-agent-ai-embedded.py and vpbx-agent-ai.py and uncom
 
 To see the chat in real time, run the url of your VitalPBX:<br>
 For example:<br>
-mypbxurl/chat.html
+mypbxurl/chatview
 
 ### Note
 Remember to unblock port 3001 or the one you decided to use in the VitalPBx firewall as in any other firewall that VitalPBX has in front of you.<br>
