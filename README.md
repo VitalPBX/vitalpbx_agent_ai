@@ -177,8 +177,82 @@ Finally, edit the files vpbx-agent-ai-embedded.py and vpbx-agent-ai.py and uncom
 
 To see the chat in real time, run the url of your VitalPBX:<br>
 For example:<br>
-mypbxurl/chatview
+http://mypbxurl/chatview<br>
+or<br>
+https://mypbxurl/chatview
 
+## Web Chat
+It is also possible to ask questions to the document that we have uploaded through the web interface; for them we must follow the following procedure.
+
+We are going to copy the chatserver.py file to the folder we want (It could be /var/lib/asterisk/agi-bin/).
+<pre>
+  cd /var/lib/asterisk/agi-bin/
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chatbotserver.py
+  chamod +x chatbotserver.py
+</pre>
+
+Edit the file you just downloaded (chatbotserver.py)
+<pre>
+  cd /var/lib/asterisk/agi-bin/
+  nano chatbotserver.py
+</pre>
+
+Replace the following lines with your IP or Domain if you use SSL.<br>
+If you use ssl with a valid domain remember to change ws to wss.
+<pre>
+start_server = websockets.serve(echo, 'Your_IP_or_Domain', 3002)
+print("WebSocket server started on ws://Your_IP_or_Domain:3002")
+</pre>
+
+Now we will proceed to create the service
+<pre>
+  cd /etc/systemd/system/
+  nano vpbxchatbot.service
+</pre>
+
+Copy and paste the following content
+<pre>
+[Unit]
+Description=Agent AI
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /var/lib/asterisk/agi-bin/chatbotserver.py
+Restart=always
+User=root
+Group=root
+Environment=VariableDeEntorno=valor
+WorkingDirectory=/var/lib/asterisk/agi-bin
+
+[Install]
+WantedBy=multi-user.target
+</pre>
+
+Enable and start the service
+<pre>
+systemctl enable vpbxchatbot
+systemctl start vpbxchatbot
+systemctl status vpbxchatbot
+</pre>
+
+Now we are going to download the chat.html file and copy it to the /usr/share/vitalpbx/www folder
+<pre>
+  cd /usr/share/vitalpbx/www
+  mkdir chatbot
+  cd chatbot
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chatbot/index.html
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chatbot/bootstrap.min.css
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/chatbot/jquery.min.js
+</pre>
+For HTTPS: wss, for HTTP: ws. If you are not going to use SSL just enter the IP of your server, otherwise leave ${location.hostname}.<br>
+
+Finally, edit the files vpbx-agent-ai-embedded.py and vpbx-agent-ai.py and uncomment everything related to sending messages via websocket.<br>
+
+To see the chat in real time, run the url of your VitalPBX:<br>
+For example:<br>
+http://mypbxurl/chatbot<br>
+or<br>
+https://mypbxurl/chatbot
 ### Note
 Remember to unblock port 3001 or the one you decided to use in the VitalPBx firewall as in any other firewall that VitalPBX has in front of you.<br>
 To make sure everything is fine, we can run the following command.
