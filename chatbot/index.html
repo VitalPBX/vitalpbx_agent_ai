@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>VitalPBX Wiki-AI</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #ECE5DD; /* Background similar to WhatsApp Web */
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .chat-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #B2AFAF;
+        }
+
+        .chat-header {
+            background-color: #009688; /* Header color */
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #B2AFAF;
+        }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .user-message {
+            background-color: #DCF8C6;
+            float: right;
+            clear: both;
+            margin: 5px 0px;
+            border-radius: 10px;
+            max-width: 70%;
+            overflow-wrap: break-word;
+            padding: 8px;
+            font-size: 18px;
+        }
+
+        .bot-message {
+            background-color: #ECECEC;
+            float: left;
+            clear: both;
+            margin: 5px 0px;
+            border-radius: 10px;
+            max-width: 70%;
+            overflow-wrap: break-word;
+            padding: 8px;
+            font-size: 18px;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .input-group {
+            border-top: 1px solid #B2AFAF;
+            padding: 10px;
+            background-color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            Chatbot
+        </div>
+        <div class="chat-box clearfix" id="chatContent">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="input-group">
+            <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
+            <div class="input-group-append">
+                <button id="sendBtn" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+  
+        const RECONNECT_DELAY = 5000; // 5 seconds
+
+        let ws;
+    
+        function connect() {
+            ws = new WebSocket(`wss://${location.hostname}:3002`);
+
+            ws.onopen = function() {
+                console.log("WebSocket connection opened");
+            };
+
+            ws.onclose = function(event) {
+                if(event.wasClean) {
+                    console.log("Closed cleanly, code=", event.code, ", reason=", event.reason);
+                } else {
+                    console.log("Connection died");
+                }
+                setTimeout(connect, RECONNECT_DELAY);  // Reconectar después de un delay
+            };
+
+            ws.onerror = function(error) {
+                console.error("WebSocket Error:", error);
+            };
+
+            ws.onmessage = handleMessage; // puedes mover la función handleMessage fuera de $(document).ready
+        }
+
+
+
+        function handleMessage(event) {
+            $('.temp-reply').remove();
+            const data = JSON.parse(event.data);
+            var formattedAnswer = data.answer.replace(/\n/g, '<br>');
+        
+            var answerElement = $('<div class="bot-message"></div>');
+            $('#chatContent').append(answerElement);
+
+            if (data.status == 'OK') {
+                typeWriter(formattedAnswer, answerElement[0]);
+            } else {
+                typeWriter("Error retrieving answer.", answerElement[0]);
+            }
+
+            autoScroll();
+        }
+
+        function autoScroll() {
+            var chatBox = $(".chat-box");
+            chatBox.scrollTop(chatBox[0].scrollHeight);
+        }
+
+        function typeWriter(text, element, delay = 10) {
+            let runningText = '';
+            let index = 0;
+
+            function typeChar() {
+                if (index < text.length) {
+                    let char = text.charAt(index);
+
+                    if (char === '\n') {
+                        runningText += '<br>';
+                    } else {
+                        runningText += char;
+                    }
+
+                    element.innerHTML = '';
+                    element.insertAdjacentHTML('beforeend', runningText);
+                    index++;
+                    setTimeout(typeChar, delay);
+                    autoScroll();
+                }
+            }
+
+            typeChar();
+        }
+
+        $(document).ready(function() {
+            connect();
+            $('#sendBtn').click(sendMessage);
+            $('#messageInput').keydown(function(event) {
+                if (event.which === 13) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                var message = $('#messageInput').val();
+                if (!message) return;
+
+                $('#chatContent').append('<div class="user-message">' + message + '</div>');
+                $('#messageInput').val('');
+
+                var tempReply = '<div class="bot-message temp-reply">Please wait...</div>';
+                $('#chatContent').append(tempReply);
+
+                autoScroll();
+
+                // Send message over WebSocket
+                ws.send(JSON.stringify({ message: message }));
+            }
+
+            // Handle incoming WebSocket messages
+            ws.onmessage = function(event) {
+                $('.temp-reply').remove();
+                const data = JSON.parse(event.data);
+                var formattedAnswer = data.answer.replace(/\n/g, '<br>');
+            
+                var answerElement = $('<div class="bot-message"></div>');
+                $('#chatContent').append(answerElement);
+
+                if (data.status == 'OK') {
+                    typeWriter(formattedAnswer, answerElement[0]);
+                } else {
+                    typeWriter("Error retrieving answer.", answerElement[0]);
+                }
+
+                autoScroll();
+            };
+        });
+    </script>
+
+</body>
+</html>
