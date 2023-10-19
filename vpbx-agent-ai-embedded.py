@@ -140,7 +140,7 @@ def main():
             
             # Create a ConversationalRetrievalChain for conversation with ChatGPT
             resp_qa = ConversationalRetrievalChain.from_llm(
-                ChatOpenAI(temperature=0.2, model_name='gpt-3.5-turbo'),
+                ChatOpenAI(temperature=0, model_name='gpt-3.5-turbo'),
                 retriever=vectordb.as_retriever(search_kwargs={'k': 6}),
                 return_source_documents=True,
                 verbose=False
