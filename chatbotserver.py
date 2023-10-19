@@ -33,7 +33,7 @@ vectordb = Chroma(persist_directory=PATH_TO_DATABASE, embedding_function=embeddi
 
 # Setup the conversational retrieval chain with OpenAI's chat model and the vector database
 pdf_qa = ConversationalRetrievalChain.from_llm(
-    ChatOpenAI(temperature=0.2, model_name='gpt-3.5-turbo'),
+    ChatOpenAI(temperature=0, model_name='gpt-3.5-turbo'),
     retriever=vectordb.as_retriever(search_kwargs={'k': 6}),
     return_source_documents=True,
     verbose=False
