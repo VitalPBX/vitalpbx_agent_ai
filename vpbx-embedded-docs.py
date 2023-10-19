@@ -41,5 +41,5 @@ text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=10)
 documents = text_splitter.split_documents(documents)
 
 # Convert the document chunks to embeddings and save them to the vector store
-vectordb = Chroma.from_documents(documents, embedding=OpenAIEmbeddings(), persist_directory="./data")
+vectordb = Chroma.from_documents(documents, embedding=OpenAIEmbeddings(), persist_directory=PATH_TO_DATABASE)
 vectordb.persist()
