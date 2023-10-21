@@ -87,58 +87,106 @@
 
     </style>
 </head>
-
 <body>
+    <!-- A div element where chat messages will be displayed -->
     <div id="chat"></div>
+
     <script>
+        // The code establishes a WebSocket connection to a server on port 3001. 
+        // It listens for messages coming from the WebSocket and displays them in the chat div. 
+        // Messages that start with "USER:" or "ASSISTANT:" are formatted differently, 
+        // and the actual message content is animated to appear letter by letter. 
+        // If the WebSocket connection is lost, the code will attempt to reconnect every 5 seconds.
+
         // JavaScript code for handling WebSocket communication and message display
+        // Reference to the chat display div
         const chatDiv = document.getElementById('chat');
 
+        // Function to establish a WebSocket connection
         function connect() {
+            // Initialize a WebSocket connection using the current host at port 3001
             const socket = new WebSocket(`wss://${location.hostname}:3001`);
 
+            // Event listener for incoming WebSocket messages
             socket.addEventListener('message', function (event) {
-                // Create a chat bubble
-                const bubble = document.createElement('pre');
-                bubble.textContent = ''; // Initially empty
-                chatDiv.appendChild(bubble);
-                chatDiv.scrollTop = chatDiv.scrollHeight;
+                let prefix;
+                let formattedMessage;
+                let messageContent = event.data;
 
-                // Display content letter by letter
-                const message = event.data;
+                // Check for message prefixes and remove them, while storing the prefix for later use
+                if (messageContent.startsWith("USER:")) {
+                    prefix = "USER";
+                    messageContent = messageContent.replace("USER:", "").trim();
+                } else if (messageContent.startsWith("ASSISTANT:")) {
+                    prefix = "ASSISTANT";
+                    messageContent = messageContent.replace("ASSISTANT:", "").trim();
+                } else {
+                    prefix = "";  // For messages with no prefix
+                }
+
+                // Create a chat bubble for the message
+                const bubble = document.createElement('pre');
+                chatDiv.appendChild(bubble);
+                chatDiv.scrollTop = chatDiv.scrollHeight;  // Auto-scroll to the latest message
+
+                // If a prefix was detected, display it in bold followed by the current date and time
+                if (prefix) {
+                    const strongElem = document.createElement('strong');
+                    strongElem.textContent = prefix;
+                    bubble.appendChild(strongElem);
+                    const datetime = document.createTextNode(getCurrentDateTime());
+                    bubble.appendChild(datetime);
+                }
+
+                // Create a span to hold the actual message content
+                const spanElem = document.createElement('span');
+                bubble.appendChild(spanElem);
+
+                // Animate the message content to appear letter-by-letter
                 let index = 0;
-                const speed = 30; // Typing speed (milliseconds per letter)
+                const speed = 30;
 
                 function typeWriter() {
-                    if (index < message.length) {
-                        bubble.textContent += message.charAt(index);
+                    if (index < messageContent.length) {
+                        spanElem.append(document.createTextNode(messageContent.charAt(index)));
                         index++;
-                        chatDiv.scrollTop = chatDiv.scrollHeight;
+                        chatDiv.scrollTop = chatDiv.scrollHeight;  // Keep auto-scrolling
                         setTimeout(typeWriter, speed);
                     }
                 }
 
                 typeWriter();
 
-                // Add "user" class if the message starts with "USER"
-                if (event.data.startsWith("USER")) {
+                // Add CSS class based on the prefix for styling purposes
+                if (prefix === "USER") {
                     bubble.classList.add("user");
+                } else if (prefix === "ASSISTANT") {
+                    bubble.classList.add("assistant");
                 }
             });
 
+            // Helper function to get the current date and time in "YYYY-MM-DD HH:MM:SS" format
+            function getCurrentDateTime() {
+                const now = new Date();
+                const dateStr = now.toISOString().split('T')[0];
+                const timeStr = now.toTimeString().slice(0, 8);
+                return ` (${dateStr} ${timeStr}): \n`;  
+            }
+
+            // Event listener for when the WebSocket connection closes
             socket.addEventListener('close', function (event) {
                 console.log('Socket closed. Trying to reconnect in 5 seconds...');
-                setTimeout(connect, 5000);  // Try to reconnect every 5 seconds
+                setTimeout(connect, 5000);  // Attempt to reconnect every 5 seconds
             });
 
+            // Event listener for successful WebSocket connection
             socket.addEventListener('open', function (event) {
                 console.log('Connected to the WebSocket server.');
             });
         }
 
-        // Start the connection on page load
+        // Initiate the WebSocket connection when the page loads
         connect();
     </script>
 </body>
-
 </html>
