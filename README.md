@@ -70,14 +70,14 @@ If you want to add more languages, you must modify the scripts<br>
 
 Below we show an example of how you should use the script to record the prompt.
 <pre>
-./record-prompt.py wait-en "wait a moment" "en-US"
-./record-prompt.py welcome-en "Thanks for calling, I'm Vicky, your AI assistant, how can I help you today?" "en-US"
-./record-prompt.py short-message-en "The question is too short, please try again" "en-US"
-./record-prompt.py anything-else-en "Anything else I can help you with?" "en-US"  
-./record-prompt.py wait-es "espere un momento" "es-ES"
-./record-prompt.py welcome-es "Gracias por llamar, soy Vicky, tu asistente, en que te puedo ayudar hoy?" "es-ES"
-./record-prompt.py short-message-es "La pregunta es demasiado corta, intente de nuevo por favor" "es-ES"
-./record-prompt.py anything-else-es "Algo más en lo que te pueda ayudar?" "es-ES"  
+./record-prompt.py wait-en "Just a moment, please. We're fetching the information for you." "en-US"
+./record-prompt.py welcome-en "Hello! Welcome to the AI Agent. Please ask your question after the tone." "en-US"
+./record-prompt.py short-message-en "Your question is too short. Please provide more details." "en-US"
+./record-prompt.py anything-else-en "Can I assist you with anything else?" "en-US"  
+./record-prompt.py wait-es "Un momento, por favor. Estamos buscando la información para ti." "es-ES"
+./record-prompt.py welcome-es "¡Hola! Bienvenido al Agente de IA. Haga su pregunta después del tono." "es-ES"
+./record-prompt.py short-message-es "Tu pregunta es demasiado corta. Por favor, proporciona más detalles." "es-ES"
+./record-prompt.py anything-else-es "¿Hay algo más en lo que pueda ayudarte?" "es-ES"  
 </pre>
 
 ## Testing Embedding
