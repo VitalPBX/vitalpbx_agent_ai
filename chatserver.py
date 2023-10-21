@@ -16,6 +16,8 @@ connected = set()
 #ssl_cert = "/usr/share/vitalpbx/certificates/your.domain/bundle.pem"
 #ssl_key = "/usr/share/vitalpbx/certificates/your.domain/private.pem"
 
+#ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
+
 async def echo(websocket, path):
     # Register the WebSocket client.
     print(f"Client {websocket.remote_address} connected.")
