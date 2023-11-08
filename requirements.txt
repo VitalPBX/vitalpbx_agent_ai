@@ -1,9 +1,9 @@
 pip install pyst2
 pip install pydub
 pip install python-dotenv==0.21.0
-pip install langchain==0.0.161
+pip install langchain==0.0.331rc2
 pip install pypdf==3.8.1
 pip install docx2txt==0.8
-pip install openai==0.27.6
+pip install openai
 pip install chromadb==0.3.22
 pip install tiktoken==0.4.0
