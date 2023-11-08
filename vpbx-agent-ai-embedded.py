@@ -2,6 +2,7 @@
 import sys
 import os
 import openai
+from openai import OpenAI
 import time
 # Uncomment if you are going to use sending information to a web page
 import websockets
@@ -35,6 +36,7 @@ PATH_TO_DATABASE = os.environ.get('PATH_TO_DATABASE')
 AZURE_SPEECH_KEY = os.environ.get('AZURE_SPEECH_KEY')
 AZURE_SERVICE_REGION = os.environ.get('AZURE_SERVICE_REGION')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+client = OpenAI()
 
 # Uncomment if you are going to use sending information to a web page
 # For valid domains with SSL:
@@ -69,6 +71,8 @@ else:
     wait_message = "/var/lib/asterisk/sounds/wait-en.mp3"
     short_message = "/var/lib/asterisk/sounds/short-message-en.mp3"
 
+tts_engine = "Azure"
+
 # Uncomment if you are going to use sending information to a web page
 #async def send_message_to_websocket(message):
 #    async with websockets.connect(HOST_PORT) as websocket:
@@ -95,7 +99,10 @@ def main():
             # Once everything is fine, we send the audio to OpenAI Whisper to convert it to Text
             openai.api_key = OPENAI_API_KEY
             audio_file = open(recording_path + ".wav", "rb")
-            transcript = openai.Audio.transcribe("whisper-1", audio_file)
+            transcript = client.audio.transcriptions.create(
+                model="whisper-1", 
+                file=audio_file
+            )
             chatgpt_question = transcript.text
             chatgpt_question_agi = chatgpt_question.replace('\n', ' ') 
 
@@ -181,27 +188,36 @@ def main():
             with open(pa_file, "w") as current_answer:
                 current_answer.write(chatgpt_answer + "\n")
 
-            # Sets API Key and Region
-            speech_config = speechsdk.SpeechConfig(subscription=AZURE_SPEECH_KEY, region=AZURE_SERVICE_REGION)
+	    if tts_engine == "Azure":
+                # Sets API Key and Region
+                speech_config = speechsdk.SpeechConfig(subscription=AZURE_SPEECH_KEY, region=AZURE_SERVICE_REGION)
 
-            # Sets the synthesis output format.
-            # The full list of supported format can be found here:
-            # https://docs.microsoft.com/azure/cognitive-services/speech-service/rest-text-to-speech#audio-outputs
-            speech_config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3)
+                # Sets the synthesis output format.
+                # The full list of supported format can be found here:
+                # https://docs.microsoft.com/azure/cognitive-services/speech-service/rest-text-to-speech#audio-outputs
+                speech_config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3)
 
-            # Select synthesis language and voice
-            # Set either the `SpeechSynthesisVoiceName` or `SpeechSynthesisLanguage`.
-            speech_config.speech_synthesis_language = azure_language 
-            speech_config.speech_synthesis_voice_name = azure_voice_name
+                # Select synthesis language and voice
+                # Set either the `SpeechSynthesisVoiceName` or `SpeechSynthesisLanguage`.
+                speech_config.speech_synthesis_language = azure_language 
+                speech_config.speech_synthesis_voice_name = azure_voice_name
 
-            # Creates a speech synthesizer using file as audio output.
-            # Replace with your own audio file name.
-            speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=None)
-            result = speech_synthesizer.speak_text_async(chatgpt_answer).get()
+                # Creates a speech synthesizer using file as audio output.
+                # Replace with your own audio file name.
+                speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=None)
+                result = speech_synthesizer.speak_text_async(chatgpt_answer).get()
  
-            stream = speechsdk.AudioDataStream(result)
-            stream.save_to_wav_file(answer_path)
-
+                stream = speechsdk.AudioDataStream(result)
+                stream.save_to_wav_file(answer_path)
+            else:
+	        # Convert Text to Audio
+                response = client.audio.speech.create(
+                    model="tts-1",
+                    voice="nova",
+                    input=chatgpt_answer
+                )
+                response.stream_to_file(answer_path)
+		
             # Play the recorded audio.
             agi.appexec('MP3Player', answer_path)
 
