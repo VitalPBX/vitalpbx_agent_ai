@@ -7,3 +7,4 @@ pip install docx2txt==0.8
 pip install openai
 pip install chromadb==0.3.22
 pip install tiktoken==0.4.0
+pip install markdown
