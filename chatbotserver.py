@@ -1,6 +1,7 @@
 import os
 import asyncio
 import websockets
+import markdown
 from dotenv import load_dotenv
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
@@ -52,7 +53,8 @@ async def server(websocket, path):
 
         if query:
             result = pdf_qa({"question": query, "chat_history": chat_history})
-            response = {'status': 'OK', 'answer': result["answer"]}
+            html = convertir_markdown_a_html(result["answer"])
+            response = {'status': 'OK', 'answer': html}
             # Message received from ASSISTANT
             print(f"ASSISTANT {websocket.remote_address}: {response}")
 
