@@ -179,7 +179,7 @@
             function typeChar() {
                 if (index < text.length) {
                     let char = text.charAt(index);
-                    runningText += (char === '\n') ? '<br>' : char;
+                    runningText += char;
                     element.innerHTML = '';
                     element.insertAdjacentHTML('beforeend', runningText);
                     index++;
