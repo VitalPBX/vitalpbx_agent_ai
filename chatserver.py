@@ -1,22 +1,21 @@
 # chatserver.py
 import asyncio
 import websockets
-# Uncomment if you are using a valid domain with SSL
-#import ssl
-#import logging
 
 # Create a set to store connected WebSocket clients
 connected = set()
 
-# Uncomment if you are using a valid domain with SSL
-# logging.basicConfig()
+SSL = "yes"
+if SSL == "yes":
+    import  ssl
+    import logging
+    logging.basicConfig()
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    # You must change the path of your certificates in the following two lines:
+    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.casa.pem"
+    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.casa.pem"
+    ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
-#ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-
-#ssl_cert = "/usr/share/vitalpbx/certificates/your.domain/bundle.pem"
-#ssl_key = "/usr/share/vitalpbx/certificates/your.domain/private.pem"
-
-#ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
 async def echo(websocket, path):
     # Register the WebSocket client.
