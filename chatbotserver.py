@@ -16,8 +16,8 @@ if SSL == "yes":
     logging.basicConfig()
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     # You must change the path of your certificates in the following two lines:
-    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.org/bundle.pem"
-    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.org/private.pem"
+    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
+    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
     ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
     Load environment variables from a .env file
 
