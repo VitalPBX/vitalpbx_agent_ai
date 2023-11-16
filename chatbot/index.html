@@ -5,6 +5,7 @@
     <title>VitalPBX Wiki-AI</title>
     <link rel="stylesheet" href="bootstrap.min.css">
     <script src="jquery.min.js"></script>
+
     <style>
         body {
             background-color: #ECE5DD; /* Background similar to WhatsApp Web */
@@ -36,7 +37,7 @@
 
         .user-message {
             background-color: #DCF8C6;
-            float: right;
+            float: left;
             clear: both;
             margin: 5px 0px;
             border-radius: 10px;
@@ -73,7 +74,6 @@
     </style>
 </head>
 <body>
-
     <!-- Main chat interface container -->
     <div class="chat-container">
 
@@ -149,7 +149,8 @@
             var formattedAnswer = data.answer.replace(/\n/g, '<br>');  // Convert newline characters to HTML line breaks
  
             // Prefix the message with "ASSISTANCE" and the current date and time
-            const prefix = `<b>ASSISTANCE</b> - ${getCurrentDateTime()}<br>`;
+            // const prefix = `<b>ASSISTANCE</b> - ${getCurrentDateTime()}<br>`;
+            const prefix = `<b>Assistant</b><br>`;
             formattedAnswer = prefix + formattedAnswer; 
 
             var answerElement = $('<div class="bot-message"></div>');
@@ -211,7 +212,9 @@
                 if (!message) return;
 
                 // Display the user's message in the chatbox
-                $('#chatContent').append('<div class="user-message">' + message + '</div>');
+                const prefix = `<b>You</b><br>`;
+                formattedQuestion = prefix + message; 
+                $('#chatContent').append('<div class="user-message">' + formattedQuestion + '</div>');
                 $('#messageInput').val(''); // Clear the input box
 
                 // Display a temporary reply while waiting for a response
