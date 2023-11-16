@@ -4,25 +4,31 @@ import os
 import openai
 from openai import OpenAI
 import time
-# Uncomment if you are going to use sending information to a web page
-#import websockets
-#import asyncio
 import azure.cognitiveservices.speech as speechsdk
 from dotenv import load_dotenv
 
-# Uncomment if you are using a valid domain with ssl
-#import  ssl
-#import logging
+SSL = "no"
+if SSL == "yes":
+    import  ssl
+    import logging
+    logging.basicConfig()
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    # You must change the path of your certificates in the following two lines:
+    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
+    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
+    ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
-# Uncomment if you are using a valid domain with ssl
-#logging.basicConfig()
+# Uncomment if you are going to use sending information to a web page
+#import websockets
+#import asyncio
+# For valid domains with SSL:
+#HOST_PORT = 'wss://0.0.0.0:3001'
+# For environments without a valid domain:
+#HOST_PORT = 'ws://0.0.0.0:3001'
 
-#ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-
-#ssl_cert = "/usr/share/vitalpbx/certificates/yourdomain.com/bundle.pem"
-#ssl_key = "/usr/share/vitalpbx/certificates/yourdomain.com/private.pem"
-
-#ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
+#async def send_message_to_websocket(message):
+#    async with websockets.connect(HOST_PORT) as websocket:
+#        await websocket.send(message)
 
 # For Asterisk AGI
 from asterisk.agi import *
@@ -32,12 +38,6 @@ AZURE_SPEECH_KEY = os.environ.get('AZURE_SPEECH_KEY')
 AZURE_SERVICE_REGION = os.environ.get('AZURE_SERVICE_REGION')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 client = OpenAI()
-
-# Uncomment if you are going to use sending information to a web page
-# For valid domains with SSL:
-#HOST_PORT = 'wss://yourdomain.com:3001'
-# For environments without a valid domain:
-#HOST_PORT = 'ws://IP:3001'
 
 agi = AGI()
 
@@ -67,11 +67,6 @@ else:
     short_message = "/var/lib/asterisk/sounds/short-message-en.mp3"
 
 tts_engine = "Azure"
-
-# Uncomment if you are going to use sending information to a web page
-#async def send_message_to_websocket(message):
-#    async with websockets.connect(HOST_PORT) as websocket:
-#        await websocket.send(message)
 
 def main():
 
@@ -181,7 +176,7 @@ def main():
                 speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=None)
                 result = speech_synthesizer.speak_text_async(chatgpt_answer).get()
  
-                stream = speechsdk.AudioDataStream(result)
+                stream = speechsdk.AudioDataStream(result) 
                 stream.save_to_wav_file(answer_path)
             else:
 	        # Convert Text to Audio
