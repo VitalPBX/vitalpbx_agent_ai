@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import asyncio
 import websockets
@@ -8,21 +9,18 @@ from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 import json
-# Uncomment if you are using a valid domain with ssl
-#import  ssl
-#import logging
+SSL = "yes"
+if SSL == "yes":
+    import  ssl
+    import logging
+    logging.basicConfig()
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    # You must change the path of your certificates in the following two lines:
+    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.org/bundle.pem"
+    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.org/private.pem"
+    ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
+    Load environment variables from a .env file
 
-# Uncomment if you are using a valid domain with ssl
-# logging.basicConfig()
-
-#ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-
-#ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.org/bundle.pem"
-#ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.org/private.pem"
-
-#ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
-
-# Load environment variables from a .env file
 load_dotenv('.env')
 
 # Get the path to the database from environment variables
@@ -64,9 +62,12 @@ async def server(websocket, path):
     except Exception as e:
         print(f"Error occurred: {e}")
 
-# If you are not going to use SSL just enter the IP of your server, otherwise enter the domain.
-start_server = websockets.serve(server, '192.168.10.10', 3002)
-print("WebSocket server started on ws://192.168.10.10:3002")
+if SSL == "yes":
+    start_server = websockets.serve(server, '0.0.0.0', 3002, ssl=ssl_context)
+    print("WebSocket server started on ws://0.0.0.0:3002")
+else:
+    start_server = websockets.serve(server, '0.0.0.0', 3002)
+    print("WebSocket server started on ws://0.0.0.0:3002")
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
