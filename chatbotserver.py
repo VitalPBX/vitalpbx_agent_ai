@@ -64,7 +64,7 @@ async def server(websocket, path):
 
 if SSL == "yes":
     start_server = websockets.serve(server, '0.0.0.0', 3002, ssl=ssl_context)
-    print("WebSocket server started on ws://0.0.0.0:3002")
+    print("WebSocket server started on wss://0.0.0.0:3002")
 else:
     start_server = websockets.serve(server, '0.0.0.0', 3002)
     print("WebSocket server started on ws://0.0.0.0:3002")
