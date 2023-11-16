@@ -2,9 +2,6 @@
 import asyncio
 import websockets
 
-# Create a set to store connected WebSocket clients
-connected = set()
-
 SSL = "yes"
 if SSL == "yes":
     import  ssl
@@ -16,6 +13,8 @@ if SSL == "yes":
     ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.casa.pem"
     ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
+# Create a set to store connected WebSocket clients
+connected = set()
 
 async def echo(websocket, path):
     # Register the WebSocket client.
@@ -36,9 +35,12 @@ async def echo(websocket, path):
         connected.remove(websocket)
         print(f"Client {websocket.remote_address} disconnected.")
 
-# If you are not using SSL, enter the IP of your server; otherwise, enter the domain.
-start_server = websockets.serve(echo, 'IP or Domain', 3001)
-print("WebSocket server started on ws://IP or Domain:3001")
+if SSL == "yes":
+    start_server = websockets.serve(server, '0.0.0.0', 3001, ssl=ssl_context)
+    print("WebSocket server started on wss://0.0.0.0:3001")
+else:
+    start_server = websockets.serve(server, '0.0.0.0', 3001)
+    print("WebSocket server started on ws://0.0.0.0:3001")
 
 # Start the WebSocket server
 asyncio.get_event_loop().run_until_complete(start_server)
