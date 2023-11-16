@@ -21,7 +21,7 @@ if SSL == "yes":
     ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
     Load environment variables from a .env file
 
-load_dotenv('.env')
+load_dotenv('/PATH_TO_.ENV_FILE/.env')
 
 # Get the path to the database from environment variables
 PATH_TO_DATABASE = os.environ.get('PATH_TO_DATABASE')
