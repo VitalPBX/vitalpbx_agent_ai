@@ -25,6 +25,7 @@ if SSL == "yes":
 # Load environment variables from a .env file
 load_dotenv("PATH_TO_.ENV_FILE/.env")
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+OPENAI_ASSISTANT_ID = os.environ.get('OPENAI_ASSISTANT_ID')
 
 client = OpenAI()
 thread = client.beta.threads.create()
@@ -49,7 +50,7 @@ async def server(websocket, path):
 
             run = client.beta.threads.runs.create(
                 thread_id=thread.id,
-                assistant_id="asst_3787z2CDX12ZdoIzrN2S2Fzn",
+                assistant_id=OPENAI_ASSISTANT_ID,
                 instructions="Please address the user as Dear Customer. The user has a premium account."
             )
 
