@@ -4,9 +4,6 @@ import os
 import openai
 from openai import OpenAI
 import time
-# Uncomment if you are going to use sending information to a web page
-import websockets
-import asyncio
 import azure.cognitiveservices.speech as speechsdk
 from dotenv import load_dotenv 
 from langchain.embeddings import OpenAIEmbeddings
@@ -14,19 +11,28 @@ from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 
-# Uncomment if you are using a valid domain with ssl
-#import  ssl
-#import logging
+SSL = "no"
+if SSL == "yes":
+    import  ssl
+    import logging
+    logging.basicConfig()
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    # You must change the path of your certificates in the following two lines:
+    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
+    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
+    ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
-# Uncomment if you are using a valid domain with ssl
-#logging.basicConfig()
+# Uncomment if you are going to use sending information to a web page
+#import websockets
+#import asyncio
+# For valid domains with SSL:
+#HOST_PORT = 'wss://0.0.0.0:3001'
+# For environments without a valid domain:
+#HOST_PORT = 'ws://0.0.0.0:3001'
 
-#ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-
-#ssl_cert = "/usr/share/vitalpbx/certificates/yourdomain.com/bundle.pem"
-#ssl_key = "/usr/share/vitalpbx/certificates/yourdomain.com/private.pem"
-
-#ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
+#async def send_message_to_websocket(message):
+#    async with websockets.connect(HOST_PORT) as websocket:
+#        await websocket.send(message)
 
 # For Asterisk AGI
 from asterisk.agi import *
@@ -37,12 +43,6 @@ AZURE_SPEECH_KEY = os.environ.get('AZURE_SPEECH_KEY')
 AZURE_SERVICE_REGION = os.environ.get('AZURE_SERVICE_REGION')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 client = OpenAI()
-
-# Uncomment if you are going to use sending information to a web page
-# For valid domains with SSL:
-#HOST_PORT = 'wss://yourdomain.com:3001'
-# For environments without a valid domain:
-#HOST_PORT = 'ws://IP:3001'
 
 agi = AGI()
 
@@ -188,7 +188,7 @@ def main():
             with open(pa_file, "w") as current_answer:
                 current_answer.write(chatgpt_answer + "\n")
 
-	    if tts_engine == "Azure":
+            if tts_engine == "Azure":
                 # Sets API Key and Region
                 speech_config = speechsdk.SpeechConfig(subscription=AZURE_SPEECH_KEY, region=AZURE_SERVICE_REGION)
 
@@ -217,7 +217,7 @@ def main():
                     input=chatgpt_answer
                 )
                 response.stream_to_file(answer_path)
-		
+
             # Play the recorded audio.
             agi.appexec('MP3Player', answer_path)
 
