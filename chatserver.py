@@ -37,10 +37,10 @@ async def echo(websocket, path):
 
 if SSL == "yes":
     start_server = websockets.serve(server, '0.0.0.0', 3001, ssl=ssl_context)
-    print("WebSocket server started on wss://0.0.0.0:3001")
+    print("WebSocket echo started on wss://0.0.0.0:3001")
 else:
     start_server = websockets.serve(server, '0.0.0.0', 3001)
-    print("WebSocket server started on ws://0.0.0.0:3001")
+    print("WebSocket echo started on ws://0.0.0.0:3001")
 
 # Start the WebSocket server
 asyncio.get_event_loop().run_until_complete(start_server)
