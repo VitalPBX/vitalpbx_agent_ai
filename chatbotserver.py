@@ -19,8 +19,8 @@ if SSL == "yes":
     ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
     ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
     ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
-    Load environment variables from a .env file
 
+# Load environment variables from a .env file
 load_dotenv('/PATH_TO_.ENV_FILE/.env')
 
 # Get the path to the database from environment variables
@@ -51,7 +51,7 @@ async def server(websocket, path):
 
         if query:
             result = pdf_qa({"question": query, "chat_history": chat_history})
-            html = convertir_markdown_a_html(result["answer"])
+            html = markdown.markdown(result["answer"])
             response = {'status': 'OK', 'answer': html}
             # Message received from ASSISTANT
             print(f"ASSISTANT {websocket.remote_address}: {response}")
