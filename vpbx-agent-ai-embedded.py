@@ -11,25 +11,31 @@ from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 
-SSL = "no"
-if SSL == "yes":
-    import  ssl
-    import logging
-    logging.basicConfig()
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    # You must change the path of your certificates in the following two lines:
-    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
-    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
-    ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
-
 # Uncomment if you are going to use sending information to a web page
+#SSL = "yes"
+#if SSL == "yes":
+#    import  ssl
+#    import logging
+#    logging.basicConfig()
+#    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+#    # Uncomment only if you have a Seft Signed type certificate
+#    #ssl_context.check_hostname = False  # Disable host name verification
+#    #ssl_context.verify_mode = ssl.CERT_NONE  # Disable certificate verification
+#    # You must change the path of your certificates in the following two lines:
+#    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
+#    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
+#    ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
+
 #import websockets
 #import asyncio
 # For valid domains with SSL:
 #HOST_PORT = 'wss://0.0.0.0:3001'
-# For environments without a valid domain:
-#HOST_PORT = 'ws://0.0.0.0:3001'
+#async def send_message_to_websocket(message):
+#    async with websockets.connect(HOST_PORT, ssl=ssl_context) as websocket:
+#        await websocket.send(message)
 
+# For environments without a ssl:
+#HOST_PORT = 'ws://0.0.0.0:3001'
 #async def send_message_to_websocket(message):
 #    async with websockets.connect(HOST_PORT) as websocket:
 #        await websocket.send(message)
@@ -73,11 +79,6 @@ else:
 
 tts_engine = "Azure"
 
-# Uncomment if you are going to use sending information to a web page
-#async def send_message_to_websocket(message):
-#    async with websockets.connect(HOST_PORT) as websocket:
-#        await websocket.send(message)
-
 def main():
 
     try:
@@ -119,7 +120,7 @@ def main():
             # Uncomment if you want to use this functionality with the chatserver.py script
             # If the chatserver.py program is not running the AGI will not work.
             #try:
-            #    chatgpt_question_tv = "USER" + chatgpt_question
+            #    chatgpt_question_tv = "<b>You</b><br>" + chatgpt_question
             #    asyncio.get_event_loop().run_until_complete(send_message_to_websocket(chatgpt_question_tv))
             #    agi.verbose("MESSAGE SENT TO WEBSOCKET")
             #except AGIException as e:
@@ -175,7 +176,7 @@ def main():
             # Uncomment if you want to use this functionality with the chatserver.py script
             # If the chatserver.py program is not running the AGI will not work.
             #try:
-            #    chatgpt_answer_tv = "ASSISTANT" + chatgpt_answer 
+            #    chatgpt_answer_tv = "<b>Assistant</b><br>" + chatgpt_answer 
             #    asyncio.get_event_loop().run_until_complete(send_message_to_websocket(chatgpt_answer_tv)) 
             #    agi.verbose("MESSAGE SENT TO WEBSOCKET")     
             #except AGIException as e:
