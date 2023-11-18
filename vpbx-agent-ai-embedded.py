@@ -86,7 +86,7 @@ def main():
     try:
 
         # We send the 'raw' command to record the audio, 'q' for no beep, 2 seconds of silence, '30' max duration, 'y' to overwrite existing file
-        sys.stdout.write('EXEC Record ' + recording_path + '.wav,2,30,yq\n')
+        sys.stdout.write('EXEC Record ' + recording_path + '.wav,3,30,y\n')
         sys.stdout.flush()
         # We await Asterisk's response
         result = sys.stdin.readline().strip()
