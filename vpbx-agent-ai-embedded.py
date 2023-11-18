@@ -48,6 +48,8 @@ PATH_TO_DATABASE = os.environ.get('PATH_TO_DATABASE')
 AZURE_SPEECH_KEY = os.environ.get('AZURE_SPEECH_KEY')
 AZURE_SERVICE_REGION = os.environ.get('AZURE_SERVICE_REGION')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+OPENAI_INSTRUCTIONS = os.environ.get('OPENAI_INSTRUCTIONS')
+
 client = OpenAI()
 
 agi = AGI()
@@ -164,7 +166,10 @@ def main():
             )
 
             response = resp_qa(
-                {"question": chatgpt_question, "chat_history": chat_history})
+                part1 = OPENAI_INSTRUCTIONS + ": '"
+                part2 = chatgpt_question + "'"
+                prompt = f"{part1}{part2}"
+                {"question": prompt, "chat_history": chat_history})
 
             chatgpt_answer = response["answer"]
             chatgpt_answer_agi = chatgpt_answer.replace('\n', ' ')
