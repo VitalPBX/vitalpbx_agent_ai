@@ -71,11 +71,11 @@ If you want to add more languages, you must modify the scripts<br>
 Below we show an example of how you should use the script to record the prompt.
 <pre>
 ./record-prompt.py wait-en "Just a moment, please. We're fetching the information for you." "en-US"
-./record-prompt.py welcome-en "Hello! Welcome to the AI Agent. Please ask your question after the tone." "en-US"
+./record-prompt.py welcome-en "Welcome to the A.I. Assistant. Please ask your question after the tone." "en-US"
 ./record-prompt.py short-message-en "Your question is too short. Please provide more details." "en-US"
 ./record-prompt.py anything-else-en "Can I assist you with anything else?" "en-US"  
 ./record-prompt.py wait-es "Un momento, por favor. Estamos buscando la información para ti." "es-ES"
-./record-prompt.py welcome-es "¡Hola! Bienvenido al Agente de IA. Haga su pregunta después del tono." "es-ES"
+./record-prompt.py welcome-es "Bienvenido al Asistente de I.A. Haga su pregunta después del tono." "es-ES"
 ./record-prompt.py short-message-es "Tu pregunta es demasiado corta. Por favor, proporciona más detalles." "es-ES"
 ./record-prompt.py anything-else-es "¿Hay algo más en lo que pueda ayudarte?" "es-ES"  
 </pre>
