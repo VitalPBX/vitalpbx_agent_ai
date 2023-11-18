@@ -8,7 +8,7 @@ import azure.cognitiveservices.speech as speechsdk
 from dotenv import load_dotenv
 
 # Uncomment if you are going to use sending information to a web page
-#SSL = "no"
+#SSL = "yes"
 #if SSL == "yes":
 #    import  ssl
 #    import logging
@@ -42,6 +42,8 @@ load_dotenv("/var/lib/asterisk/agi-bin/.env")
 AZURE_SPEECH_KEY = os.environ.get('AZURE_SPEECH_KEY')
 AZURE_SERVICE_REGION = os.environ.get('AZURE_SERVICE_REGION')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+OPENAI_INSTRUCTIONS = os.environ.get('OPENAI_INSTRUCTIONS')
+
 client = OpenAI()
 
 agi = AGI()
@@ -130,15 +132,16 @@ def main():
             # Send the question to ChatGPT
             # Low "Temperature": More deterministic and predictable responses. High "Temperature": More diverse and creative responses, but less predictable.
 
-            messages = []
-            messages.append({"role": "user", "content": chatgpt_question})
-            messages.append({"role": "assistant", "content": previous_question})
-            response = openai.ChatCompletion.create(
-                       model="gpt-3.5-turbo",
-                       messages=messages,
-                       temperature=0.2 
-                       )
-            chatgpt_answer = response['choices'][0]['message']['content']
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": OPENAI_INSTRUCTIONS},
+                    {"role": "user", "content": chatgpt_question},
+                    {"role": "assistant", "content": previous_question}
+                ]
+            )
+
+            chatgpt_answer = response.choices[0].message.content
             chatgpt_answer_agi = chatgpt_answer.replace('\n', ' ') 
 
             # save current question
