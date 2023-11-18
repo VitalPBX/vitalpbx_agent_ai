@@ -166,10 +166,7 @@ def main():
             )
 
             response = resp_qa(
-                part1 = OPENAI_INSTRUCTIONS + ": '"
-                part2 = chatgpt_question + "'"
-                prompt = f"{part1}{part2}"
-                {"question": prompt, "chat_history": chat_history})
+                {"question": f"{OPENAI_INSTRUCTIONS}: '{chatgpt_question}'", "chat_history": chat_history})
 
             chatgpt_answer = response["answer"]
             chatgpt_answer_agi = chatgpt_answer.replace('\n', ' ')
