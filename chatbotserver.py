@@ -25,6 +25,7 @@ load_dotenv('/PATH_TO_.ENV_FILE/.env')
 
 # Get the path to the database from environment variables
 PATH_TO_DATABASE = os.environ.get('PATH_TO_DATABASE')
+OPENAI_INSTRUCTIONS = os.environ.get('OPENAI_INSTRUCTIONS')
 
 # Initialize embeddings and vector database
 embeddings = OpenAIEmbeddings()
@@ -50,7 +51,8 @@ async def server(websocket, path):
         print(f"USER {websocket.remote_address}: {query}")
 
         if query:
-            result = pdf_qa({"question": query, "chat_history": chat_history})
+            result = resp_qa(
+                {"question": f"{OPENAI_INSTRUCTIONS}: '{query}'", "chat_history": chat_history})
             html = markdown.markdown(result["answer"])
             response = {'status': 'OK', 'answer': html}
             # Message received from ASSISTANT
