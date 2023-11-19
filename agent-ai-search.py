@@ -18,14 +18,15 @@ if SSL == "yes":
     logging.basicConfig()
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     # You must change the path of your certificates in the following two lines:
-    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
-    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
+    ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.casa.pem"
+    ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.casa.pem"
     ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_key)
 
 # Load environment variables from a .env file
-load_dotenv("PATH_TO_.ENV_FILE/.env")
+load_dotenv("/var/lib/asterisk/agi-bin/.env")
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 OPENAI_ASSISTANT_ID = os.environ.get('OPENAI_ASSISTANT_ID')
+OPENAI_INSTRUCTIONS = os.environ.get('OPENAI_INSTRUCTIONS')
 
 client = OpenAI()
 thread = client.beta.threads.create()
@@ -51,7 +52,7 @@ async def server(websocket, path):
             run = client.beta.threads.runs.create(
                 thread_id=thread.id,
                 assistant_id=OPENAI_ASSISTANT_ID,
-                instructions="Please address the user as Dear Customer. The user has a premium account."
+                instructions=OPENAI_INSTRUCTIONS
             )
 
             runStatus = client.beta.threads.runs.retrieve(
