@@ -48,7 +48,6 @@ PATH_TO_DATABASE = os.environ.get('PATH_TO_DATABASE')
 AZURE_SPEECH_KEY = os.environ.get('AZURE_SPEECH_KEY')
 AZURE_SERVICE_REGION = os.environ.get('AZURE_SERVICE_REGION')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-OPENAI_INSTRUCTIONS = os.environ.get('OPENAI_INSTRUCTIONS')
 
 client = OpenAI()
 
@@ -57,6 +56,8 @@ agi = AGI()
 # Check if a file name was provided
 uniquedid = sys.argv[1] if len(sys.argv) > 1 else None
 language = sys.argv[2] if len(sys.argv) > 1 else None
+tts_engine = sys.argv[3] if len(sys.argv) > 1 else None
+instructions = sys.argv[4] if len(sys.argv) > 1 else None
 
 if uniquedid is None:
     print("No filename provided for the recording.")
@@ -68,7 +69,7 @@ answer_path = f"/tmp/ans{uniquedid}.mp3"
 pq_file = f"/tmp/pq{uniquedid}.txt"
 pa_file = f"/tmp/pa{uniquedid}.txt"
 
-if language == "es-ES":
+if language == "es":
     azure_language = "es-ES" 
     azure_voice_name = "es-ES-ElviraNeural"
     wait_message = "/var/lib/asterisk/sounds/wait-es.mp3"
@@ -79,7 +80,10 @@ else:
     wait_message = "/var/lib/asterisk/sounds/wait-en.mp3"
     short_message = "/var/lib/asterisk/sounds/short-message-en.mp3"
 
-tts_engine = "Azure"
+if tts_engine == "Azure":
+    tts_engine = "Azure"
+else:
+    tts_engine = "OpenAI"
 
 def main():
 
@@ -166,7 +170,7 @@ def main():
             )
 
             response = resp_qa(
-                {"question": f"{OPENAI_INSTRUCTIONS}: '{chatgpt_question}'", "chat_history": chat_history})
+                {"question": f"{instructions}: '{chatgpt_question}'", "chat_history": chat_history})
 
             chatgpt_answer = response["answer"]
             chatgpt_answer_agi = chatgpt_answer.replace('\n', ' ')
