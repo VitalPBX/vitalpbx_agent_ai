@@ -11,15 +11,19 @@ import openai
 from openai import OpenAI
 import json
 
+# Check if SSL is enabled
 SSL = "yes"
+
 if SSL == "yes":
-    import  ssl
+    import ssl
     import logging
+
     logging.basicConfig()
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    # Uncomment only if you have a Seft Signed type certificate
-    #ssl_context.check_hostname = False  # Disable host name verification
-    #ssl_context.verify_mode = ssl.CERT_NONE  # Disable certificate verification
+    # Uncomment only if you have a Self-Signed type certificate
+    # ssl_context.check_hostname = False  # Disable host name verification
+    # ssl_context.verify_mode = ssl.CERT_NONE  # Disable certificate verification
+
     # You must change the path of your certificates in the following two lines:
     ssl_cert = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
     ssl_key = "/usr/share/vitalpbx/certificates/vitalpbx.home.pem"
@@ -34,7 +38,7 @@ OPENAI_INSTRUCTIONS = os.environ.get('OPENAI_INSTRUCTIONS')
 client = OpenAI()
 thread = client.beta.threads.create()
 
-# Files can also be added to a Message in a Thread. These files are only accessible within this specific thread. 
+# Files can also be added to a Message in a Thread. These files are only accessible within this specific thread.
 # After having uploaded a file, you can pass the ID of this File when creating the Message.
 
 async def server(websocket, path):
@@ -42,6 +46,7 @@ async def server(websocket, path):
         data = await websocket.recv()
         payload = json.loads(data)
         query = payload.get('message')
+
         # Message received from USER
         print(f"USER {websocket.remote_address}: {query}")
 
