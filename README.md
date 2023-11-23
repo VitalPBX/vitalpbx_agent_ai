@@ -23,17 +23,17 @@
 ## Install from script
 Download the script
 <pre>
-  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/vpbx-agent-ai.sh
+  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/install.sh
 </pre>
 
 Give execution permissions
 <pre>
-  chmod +x vpbx-agent-ai.sh
+  chmod +x install.sh
 </pre>
 
 Run the script
 <pre>
-  ./vpbx-agent-ai.sh
+  ./install.sh
 </pre>
 
 ## Create .env file
