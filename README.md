@@ -10,14 +10,16 @@
   apt update
   apt install python3 python3-pip
   pip install azure-cognitiveservices-speech
-</pre>
-
-<pre>
-  wget https://raw.githubusercontent.com/VitalPBX/vitalpbx_agent_ai_chatgpt/main/requirements.txt
-</pre>
-
-<pre>
-  pip install -r requirements.txt
+  pip install pyst2
+  pip install pydub
+  pip install python-dotenv==0.21.0
+  pip install langchain==0.0.331rc2
+  pip install pypdf==3.8.1
+  pip install docx2txt==0.8
+  pip install openai
+  pip install chromadb==0.3.22
+  pip install tiktoken==0.4.0
+  pip install markdown
 </pre>
 
 ## Install from script
